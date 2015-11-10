@@ -53,7 +53,9 @@ module.exports = function (options) {
     }
 
     var url = redirectUrl + this.url;
+    console.log('proxy to %s', url);
     debug('proxy to %s', url);
+    console.log(this);
     this.redirect(url);
   };
 };

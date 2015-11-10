@@ -21,6 +21,7 @@ var config = require('../config');
  */
 
 module.exports = function* syncByInstall(next) {
+  //console.log('list plugin');
   this.allowSync = false;
   if (!config.syncByInstall) {
     // only config.enablePrivate should enable sync on install

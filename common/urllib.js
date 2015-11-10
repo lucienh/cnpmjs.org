@@ -26,6 +26,7 @@ var httpsAgent;
 if (config.httpProxy) {
   var tunnel = require('tunnel-agent');
   var urlinfo = urlparse(config.httpProxy);
+  console.log('config.httpProxy is', config.httpProxy);
   if (urlinfo.protocol === 'http:') {
     httpAgent = tunnel.httpOverHttp({
       proxy: {
@@ -39,6 +40,8 @@ if (config.httpProxy) {
         port: urlinfo.port
       }
     });
+    console.log('urlinfo.hostname is', urlinfo.hostname);
+    console.log('urlinfo.port is', urlinfo.port);
   } else if (urlinfo.protocol === 'https:') {
     httpAgent = tunnel.httpOverHttps({
       proxy: {

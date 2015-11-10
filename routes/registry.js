@@ -48,6 +48,7 @@ var tags = require('../controllers/registry/package/dist_tag');
 function routes(app) {
 
   function* jsonp(next) {
+    console.log('test');
     yield* next;
     if (this.body) {
       this.jsonp = this.body;

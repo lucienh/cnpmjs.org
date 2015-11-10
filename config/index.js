@@ -30,7 +30,7 @@ var config = {
   /**
    * Cluster mode
    */
-  enableCluster: false,
+  enableCluster: true,
   numCPUs: os.cpus().length,
 
   /*
@@ -39,7 +39,7 @@ var config = {
 
   registryPort: 7001,
   webPort: 7002,
-  bindingHost: '127.0.0.1', // only binding on 127.0.0.1 for local access
+  // bindingHost: '127.0.0.1', // only binding on 127.0.0.1 for local access
 
   // debug mode
   // if in debug mode, some middleware like limit wont load
@@ -111,15 +111,15 @@ var config = {
 
   database: {
     db: 'cnpmjs_test',
-    username: 'root',
-    password: '',
+    username: 'test',
+    password: 'testcnpmjs',
 
     // the sql dialect of the database
     // - currently supported: 'mysql', 'sqlite', 'postgres', 'mariadb'
-    dialect: 'sqlite',
+    dialect: 'mysql',
 
     // custom host; default: 127.0.0.1
-    host: '127.0.0.1',
+    host: 'mysql',
 
     // custom port; default: 3306
     port: 3306,
@@ -147,7 +147,7 @@ var config = {
   downloadRedirectToNFS: false,
 
   // registry url name
-  registryHost: 'r.cnpmjs.org',
+  registryHost: '127.0.0.1',
 
   /**
    * registry mode config
@@ -174,16 +174,17 @@ var config = {
   // cnpm wont directly sync from this one
   // but sometimes will request it for some package infomations
   // please don't change it if not necessary
-  officialNpmRegistry: 'https://registry.npmjs.com',
+  officialNpmRegistry: 'http://registry.npmjs.com',
 
   // sync source, upstream registry
   // If you want to directly sync from official npm's registry
   // please drop them an email first
-  sourceNpmRegistry: 'https://registry.npm.taobao.org',
+  // sourceNpmRegistry: 'http://192.168.3.116:7001',
+  sourceNpmRegistry: 'http://registry.npmjs.com',
 
   // upstream registry is base on cnpm/cnpmjs.org or not
   // if your upstream is official npm registry, please turn it off
-  sourceNpmRegistryIsCNpm: true,
+  sourceNpmRegistryIsCNpm: false,
 
   // if install return 404, try to sync from source registry
   syncByInstall: true,
@@ -192,7 +193,7 @@ var config = {
   // none: do not sync any module, proxy all public modules from sourceNpmRegistry
   // exist: only sync exist modules
   // all: sync all modules
-  syncModel: 'none', // 'none', 'all', 'exist'
+  syncModel: 'exist', // 'none', 'all', 'exist'
 
   syncConcurrency: 1,
   // sync interval, default is 10 minutes
@@ -222,7 +223,7 @@ var config = {
 
   // if you're behind firewall, need to request through http proxy, please set this
   // e.g.: `httpProxy: 'http://proxy.mycompany.com:8080'`
-  httpProxy: null,
+  httpProxy: null
 };
 
 if (process.env.NODE_ENV !== 'test') {

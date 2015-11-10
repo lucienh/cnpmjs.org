@@ -21,7 +21,10 @@ var config = require('../config');
 
 var USER_AGENT = 'npm_service.cnpmjs.org/' + config.version + ' ' + urllib.USER_AGENT;
 
-function* request(url, options) {
+function
+*
+request(url, options)
+{
   options = options || {};
   options.dataType = options.dataType || 'json';
   options.timeout = options.timeout || 120000;
@@ -32,6 +35,7 @@ function* request(url, options) {
   options.followRedirect = true;
   var registry = options.registry || config.sourceNpmRegistry;
   url = registry + url;
+  console.log('url is', url);
   var r;
   try {
     r = yield urllib.requestThunk(url, options);
@@ -50,27 +54,32 @@ function* request(url, options) {
 
 exports.request = request;
 
-exports.getUser = function* (name) {
+exports.getUser = function * (name)
+{
   var url = '/-/user/org.couchdb.user:' + name;
-  var r = yield* request(url);
+  var r = yield * request(url);
   var data = r.data;
   if (data && !data.name) {
     // 404
     data = null;
   }
   return data;
-};
+}
+;
 
-exports.get = function* (name) {
-  var r = yield* request('/' + name);
+exports.get = function * (name)
+{
+  var r = yield * request('/' + name);
   var data = r.data;
   if (r.status === 404) {
     data = null;
   }
   return data;
-};
+}
+;
 
-exports.fetchUpdatesSince = function* (lastSyncTime, timeout) {
+exports.fetchUpdatesSince = function * (lastSyncTime, timeout)
+{
   var lastModified = lastSyncTime - ms('10m');
   var data = yield exports.getAllSince(lastModified, timeout);
   var result = {
@@ -108,9 +117,11 @@ exports.fetchUpdatesSince = function* (lastSyncTime, timeout) {
     result.names = Object.keys(data);
   }
   return result;
-};
+}
+;
 
-exports.fetchAllPackagesSince = function* (timestamp) {
+exports.fetchAllPackagesSince = function * (timestamp)
+{
   var r = yield request('/-/all/static/all.json', {
     registry: 'http://registry.npmjs.org',
     timeout: 600000
@@ -145,37 +156,45 @@ exports.fetchAllPackagesSince = function* (timestamp) {
     result.lastModified = maxModified;
   }
   return result;
-};
+}
+;
 
-exports.getAllSince = function* (startkey, timeout) {
-  var r = yield* request('/-/all/since?stale=update_after&startkey=' + startkey, {
-    timeout: timeout || 300000
-  });
+exports.getAllSince = function * (startkey, timeout)
+{
+  var r = yield * request('/-/all/since?stale=update_after&startkey=' + startkey, {
+      timeout: timeout || 300000
+    });
   return r.data;
-};
+}
+;
 
-exports.getAllToday = function* (timeout) {
-  var r = yield* request('/-/all/static/today.json', {
-    timeout: timeout || 300000
-  });
+exports.getAllToday = function * (timeout)
+{
+  var r = yield * request('/-/all/static/today.json', {
+      timeout: timeout || 300000
+    });
   // data is array: see https://registry.npmjs.org/-/all/static/today.json
   return r.data;
-};
+}
+;
 
-exports.getShort = function* (timeout) {
-  var r = yield* request('/-/short', {
-    timeout: timeout || 300000,
-    // registry.npmjs.org/-/short is 404 now therefore have a fallback
-    registry: config.sourceNpmRegistryIsCNpm ? config.sourceNpmRegistry : 'http://r.cnpmjs.org',
-  });
+exports.getShort = function * (timeout)
+{
+  var r = yield * request('/-/short', {
+      timeout: timeout || 300000,
+      // registry.npmjs.org/-/short is 404 now therefore have a fallback
+      registry: config.sourceNpmRegistryIsCNpm ? config.sourceNpmRegistry : 'http://r.cnpmjs.org',
+    });
   return r.data;
-};
+}
+;
 
-exports.getPopular = function* (top, timeout) {
-  var r = yield* request('/-/_view/dependedUpon?group_level=1', {
-    registry: config.officialNpmRegistry,
-    timeout: timeout || 120000
-  });
+exports.getPopular = function * (top, timeout)
+{
+  var r = yield * request('/-/_view/dependedUpon?group_level=1', {
+      registry: config.officialNpmRegistry,
+      timeout: timeout || 120000
+    });
   if (!r.data || !r.data.rows || !r.data.rows.length) {
     return [];
   }
@@ -188,11 +207,12 @@ exports.getPopular = function* (top, timeout) {
   return rows.sort(function (a, b) {
     return b.value - a.value;
   })
-  .slice(0, top)
-  .map(function (r) {
-    return [r.key && r.key[0] && r.key[0].trim(), r.value];
-  })
-  .filter(function (r) {
-    return r[0];
-  });
-};
+    .slice(0, top)
+    .map(function (r) {
+      return [r.key && r.key[0] && r.key[0].trim(), r.value];
+    })
+    .filter(function (r) {
+      return r[0];
+    });
+}
+;
